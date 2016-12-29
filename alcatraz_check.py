@@ -36,13 +36,14 @@ def check_tickets(year, month, day, quantity=4):
     for pos in available_seats:
         time = pos.get_text()
         href = pos['href']
+        available_spots = pos['title']
         date_found = date_rex.search(href)
         if date_found:
             year = int(date_found.group('year'))
             month = int(date_found.group('month'))
             day = int(date_found.group('day'))
             #print("Date: {}-{}-{} {}".format(year,month,day, time))
-            result.append((year, month, day, time, href))
+            result.append((year, month, day, time, available_spots, href))
 
     return result
 
@@ -56,8 +57,8 @@ def prepare_msg(result):
     msg = ""
     base_url = "https://www.alcatrazcruises.com/"
     result.sort()
-    for year, month, day, time, href in result:
-        msg += "<a href='{}'>{}-{}-{} {}</a> <br />".format(base_url + href, year, month, day, time)
+    for year, month, day, time, spots, href in result:
+        msg += "<a href='{}'>{}-{}-{} {} ({})</a> <br />".format(base_url + href, year, month, day, time, spots)
 
     return msg
 
